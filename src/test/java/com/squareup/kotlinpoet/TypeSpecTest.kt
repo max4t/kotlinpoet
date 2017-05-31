@@ -60,7 +60,7 @@ class TypeSpecTest {
     assertThat(toString(taco)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
+        |import kotlin.String
         |
         |class Taco {
         |  final override fun toString(): String {
@@ -68,7 +68,7 @@ class TypeSpecTest {
         |  }
         |}
         |""".trimMargin())
-    assertEquals(1344447270, taco.hashCode().toLong()) // Update expected number if source changes.
+    assertEquals(2095734687, taco.hashCode().toLong()) // Update expected number if source changes.
   }
 
   @Test fun interestingTypes() {
@@ -87,8 +87,8 @@ class TypeSpecTest {
         |package com.squareup.tacos
         |
         |import java.io.Serializable
-        |import java.lang.String
-        |import java.util.List
+        |import kotlin.String
+        |import kotlin.collections.List
         |
         |class Taco {
         |  val star: List<*>
@@ -180,8 +180,8 @@ class TypeSpecTest {
     assertThat(toString(service)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
         |import kotlin.Long
+        |import kotlin.String
         |
         |class Foo {
         |  constructor(id: Long, @Ping one: String, @Ping two: String, @Pong("pong") three: String,
@@ -206,8 +206,8 @@ class TypeSpecTest {
     assertThat(toString(taco)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
         |import javax.annotation.FreeRange
+        |import kotlin.String
         |
         |class EthicalTaco {
         |  val meat: @FreeRange String
@@ -220,8 +220,8 @@ class TypeSpecTest {
     val fooBar = ClassName.get(tacosPackage, "FooBar")
     val thing = ClassName.get(tacosPackage, "Thing")
     val things = ClassName.get(tacosPackage, "Things")
-    val map = ClassName.get("java.util", "Map")
-    val string = ClassName.get("java.lang", "String")
+    val map = ClassName.get(Map::class)
+    val string = ClassName.get(String::class)
     val headers = ClassName.get(tacosPackage, "Headers")
     val post = ClassName.get(tacosPackage, "POST")
     val body = ClassName.get(tacosPackage, "Body")
@@ -257,8 +257,8 @@ class TypeSpecTest {
     assertThat(toString(service)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
-        |import java.util.Map
+        |import kotlin.String
+        |import kotlin.collections.Map
         |
         |interface Service {
         |  @Headers({
@@ -284,7 +284,7 @@ class TypeSpecTest {
     assertThat(toString(taco)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
+        |import kotlin.String
         |
         |class Taco {
         |  @JsonAdapter(Foo::class)
@@ -344,7 +344,7 @@ class TypeSpecTest {
     assertThat(toString(roshambo)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
+        |import kotlin.String
         |
         |enum class Roshambo(private val handPosition: String) {
         |  /**
@@ -428,7 +428,7 @@ class TypeSpecTest {
     assertThat(toString(roshambo)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
+        |import kotlin.String
         |
         |enum class Roshambo {
         |  SPOCK {
@@ -535,10 +535,10 @@ class TypeSpecTest {
     assertThat(toString(typeSpec)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.Comparable
-        |import java.lang.Number
         |import java.lang.UnsupportedOperationException
+        |import kotlin.Comparable
         |import kotlin.Int
+        |import kotlin.Number
         |
         |class Location<T, P : Number> : Comparable<P> {
         |  val label: T
@@ -571,8 +571,8 @@ class TypeSpecTest {
     assertThat(toString(typeSpec)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.Comparable
-        |import java.lang.Number
+        |import kotlin.Comparable
+        |import kotlin.Number
         |
         |class Location<P : Number & Comparable, Q : Number & Comparable> {
         |  val x: P
@@ -595,8 +595,8 @@ class TypeSpecTest {
         |package com.squareup.tacos
         |
         |import java.io.Serializable
-        |import java.lang.Comparable
         |import java.util.AbstractSet
+        |import kotlin.Comparable
         |
         |abstract class Taco : AbstractSet<Food>, Serializable, Comparable<Taco> {
         |}
@@ -615,7 +615,7 @@ class TypeSpecTest {
     assertThat(toString(typeSpec)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.Comparable
+        |import kotlin.Comparable
         |
         |class Taco : org.fish.taco.Taco, Comparable<Taco>, com.taco.bell.Taco {
         |}
@@ -657,7 +657,7 @@ class TypeSpecTest {
         |package com.squareup.tacos
         |
         |import java.io.Serializable
-        |import java.lang.Cloneable
+        |import kotlin.Cloneable
         |
         |enum class Food : Serializable, Cloneable {
         |  LEAN_GROUND_BEEF,
@@ -677,7 +677,7 @@ class TypeSpecTest {
         |package com.squareup.tacos
         |
         |import java.io.Serializable
-        |import java.lang.Comparable
+        |import kotlin.Comparable
         |
         |interface Taco : Serializable, Comparable<Taco> {
         |}
@@ -716,7 +716,7 @@ class TypeSpecTest {
     assertThat(toString(typeSpec)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.util.List
+        |import kotlin.collections.List
         |
         |class Combo {
         |  val taco: Taco
@@ -937,18 +937,17 @@ class TypeSpecTest {
         |""".trimMargin())
   }
 
-  @Test fun arrayType() {
+  @Test fun primitiveArrayType() {
     val taco = TypeSpec.classBuilder("Taco")
         .addProperty("ints", IntArray::class)
         .build()
     assertThat(toString(taco)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import kotlin.Array
-        |import kotlin.Int
+        |import kotlin.IntArray
         |
         |class Taco {
-        |  val ints: Array<Int>
+        |  val ints: IntArray
         |}
         |""".trimMargin())
   }
@@ -979,7 +978,7 @@ class TypeSpecTest {
         |/**
         | * A hard or soft tortilla, loosely folded and filled with whatever
         | * [random][java.util.Random] tex-mex stuff we could find in the pantry
-        | * and some [java.lang.String] cheese.
+        | * and some [kotlin.String] cheese.
         | */
         |class Taco {
         |  /**
@@ -1035,7 +1034,7 @@ class TypeSpecTest {
     val taqueria = TypeSpec.classBuilder("Taqueria")
         .addFun(FunSpec.builder("prepare")
             .addParameter("workers", Int::class)
-            .addParameter("jobs", Array<Runnable>::class)
+            .addParameter("jobs", ParameterizedTypeName.get(ARRAY, ClassName.get(Runnable::class)))
             .varargs()
             .build())
         .build()
@@ -1094,10 +1093,10 @@ class TypeSpecTest {
         |
         |import com.google.common.collect.ImmutableMap
         |import java.lang.Math
-        |import java.lang.String
-        |import java.util.List
-        |import java.util.Map
         |import kotlin.Int
+        |import kotlin.String
+        |import kotlin.collections.List
+        |import kotlin.collections.Map
         |
         |class Util {
         |  private val ESCAPE_HTML: Map<String, String> = ImmutableMap.<String, String>builder()
@@ -1246,9 +1245,9 @@ class TypeSpecTest {
     assertThat(toString(taco)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
         |import kotlin.Int
         |import kotlin.Long
+        |import kotlin.String
         |
         |class Members {
         |  val W: String
@@ -1309,7 +1308,7 @@ class TypeSpecTest {
     assertThat(toString(taco)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
+        |import kotlin.String
         |
         |class Taco {
         |  val NULL: String = null
@@ -1328,7 +1327,7 @@ class TypeSpecTest {
     val codeBlock = CodeBlock.builder()
         .addStatement("%T %N = %S.substring(0, 3)", String::class, "s", "taco")
         .build()
-    assertThat(codeBlock.toString()).isEqualTo("java.lang.String s = \"taco\".substring(0, 3)\n")
+    assertThat(codeBlock.toString()).isEqualTo("kotlin.String s = \"taco\".substring(0, 3)\n")
   }
 
   @Test fun propertyToString() {
@@ -1336,7 +1335,7 @@ class TypeSpecTest {
         .initializer("%S.substring(0, 3)", "taco")
         .build()
     assertThat(property.toString())
-        .isEqualTo("val s: java.lang.String = \"taco\".substring(0, 3)\n")
+        .isEqualTo("val s: kotlin.String = \"taco\".substring(0, 3)\n")
   }
 
   @Test fun functionToString() {
@@ -1346,7 +1345,7 @@ class TypeSpecTest {
         .addStatement("return %S", "taco")
         .build()
     assertThat(funSpec.toString()).isEqualTo(""
-        + "override fun toString(): java.lang.String {\n"
+        + "override fun toString(): kotlin.String {\n"
         + "  return \"taco\"\n"
         + "}\n")
   }
@@ -1428,7 +1427,7 @@ class TypeSpecTest {
     assertThat(toString(taco)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
+        |import kotlin.String
         |
         |class Taco {
         |  override fun toString(): String {
@@ -1470,11 +1469,11 @@ class TypeSpecTest {
     assertThat(toString(taco)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
         |import java.util.Collections
         |import java.util.Comparator
-        |import java.util.List
         |import kotlin.Int
+        |import kotlin.String
+        |import kotlin.collections.List
         |
         |class Taco {
         |  fun comparePrefix(final length: Int): Comparator<String> {
@@ -1509,7 +1508,7 @@ class TypeSpecTest {
     assertThat(toString(taco)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
+        |import kotlin.String
         |
         |class Taco {
         |  val toppings: String = ${"\"\"\""}
@@ -1645,7 +1644,7 @@ class TypeSpecTest {
     assertThat(toString(location)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.Number
+        |import kotlin.Number
         |
         |class Location<T, P : Number> {
         |}
@@ -1787,7 +1786,7 @@ class TypeSpecTest {
 
   @Test fun typeFromTypeName() {
     val typeName = TypeName.get(String::class)
-    assertThat(CodeBlock.of("%T", typeName).toString()).isEqualTo("java.lang.String")
+    assertThat(CodeBlock.of("%T", typeName).toString()).isEqualTo("kotlin.String")
   }
 
   @Test fun typeFromTypeMirror() {
@@ -1801,15 +1800,15 @@ class TypeSpecTest {
   }
 
   @Test fun typeFromReflectType() {
-    assertThat(CodeBlock.of("%T", String::class).toString()).isEqualTo("java.lang.String")
+    assertThat(CodeBlock.of("%T", String::class).toString()).isEqualTo("kotlin.String")
   }
 
   @Test fun typeFromUnsupportedType() {
     try {
-      CodeBlock.builder().add("%T", "java.lang.String")
+      CodeBlock.builder().add("%T", "kotlin.String")
       fail()
     } catch (expected: IllegalArgumentException) {
-      assertThat(expected).hasMessage("expected type but was java.lang.String")
+      assertThat(expected).hasMessage("expected type but was kotlin.String")
     }
 
   }
@@ -1905,7 +1904,7 @@ class TypeSpecTest {
     assertThat(toString(taco)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
+        |import kotlin.String
         |
         |class Taco {
         |  private val foo: String
@@ -1938,7 +1937,7 @@ class TypeSpecTest {
     assertThat(toString(taco)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
+        |import kotlin.String
         |
         |class Taco {
         |  private val foo: String
@@ -1986,7 +1985,7 @@ class TypeSpecTest {
     assertThat(toString(initializersAdded)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
+        |import kotlin.String
         |
         |class Taco {
         |  private val foo: String
@@ -2040,7 +2039,7 @@ class TypeSpecTest {
     assertThat(toString(taco)).isEqualTo("""
         |package com.squareup.tacos
         |
-        |import java.lang.String
+        |import kotlin.String
         |
         |class Taco {
         |  fun call(s0: String, s1: String, s2: String, s3: String, s4: String, s5: String, s6: String,
